@@ -1,0 +1,9 @@
+# Private project instructions — not for the repo
+CLAUDE.local.md
+
+# Build output (belt-and-suspenders; the nested one also covers this)
+target/
+
+# OS / editor cruft
+.vscode/
+.idea/
