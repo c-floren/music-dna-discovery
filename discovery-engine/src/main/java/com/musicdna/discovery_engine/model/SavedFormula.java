@@ -51,4 +51,95 @@ public class SavedFormula {
 
     @CreationTimestamp
     private Instant createdAt;
+
+    // getters and setters
+    // id -> getter only
+    public Long getId() {
+        return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public DiscoveryVector getDiscoveryVector() {
+        return discoveryVector;
+    }
+
+    public void setDiscoveryVector(DiscoveryVector discoveryVector) {
+        this.discoveryVector = discoveryVector;
+    }
+
+    public String getSeedTrackId() {
+        return seedTrackId;
+    }
+
+    public void setSeedTrackId(String seedTrackId) {
+        this.seedTrackId = seedTrackId;
+    }
+
+    public String getSeedTrackName() {
+        return seedTrackName;
+    }
+
+    public void setSeedTrackName(String seedTrackName) {
+        this.seedTrackName = seedTrackName;
+    }
+
+    public String getSeedArtistName() {
+        return seedArtistName;
+    }
+
+    public void setSeedArtistName(String seedArtistName) {
+        this.seedArtistName = seedArtistName;
+    }
+
+    public Double getTargetTempo() {
+        return targetTempo;
+    }
+
+    public void setTargetTempo(Double targetTempo) {
+        this.targetTempo = targetTempo;
+    }
+
+    public Double getTargetValence() {
+        return targetValence;
+    }
+
+    public void setTargetValence(Double targetValence) {
+        this.targetValence = targetValence;
+    }
+
+    public Double getTargetEnergy() {
+        return targetEnergy;
+    }
+
+    public void setTargetEnergy(Double targetEnergy) {
+        this.targetEnergy = targetEnergy;
+    }
+
+    // createdAt -> getter only
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;                          // same object reference → equal
+        if (o == null || getClass() != o.getClass()) return false;  // null or different type → not equal
+        SavedFormula that = (SavedFormula) o;
+        return id != null && id.equals(that.id);             // equal ONLY if my id is non-null AND matches
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();   // constant — same for every instance, bucket never moves
+    }
+
 }
