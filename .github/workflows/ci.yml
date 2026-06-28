@@ -1,0 +1,56 @@
+name: CI
+
+# WHEN this pipeline runs. We gate on both:
+#  - push to master (so the trunk is always verified)
+#  - any pull_request targeting master (so a PR can't merge red)
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # A throwaway REAL Postgres, booted as a Docker "service container"
+    # alongside the job. It listens on localhost:5432 — the exact URL
+    # application.properties already points at. These creds match the
+    # app's expected username/db; the password is an ephemeral CI-only
+    # value (NOT a secret — this DB is destroyed when the job ends).
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_DB: musicdna
+          POSTGRES_USER: musicdna_app
+          POSTGRES_PASSWORD: ci_test_pw
+        ports:
+          - 5432:5432
+        # Don't start the build until Postgres answers, or the
+        # context-load test races the DB and fails intermittently.
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 25 (Temurin) + cache Maven deps
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Build and test
+        working-directory: discovery-engine
+        # application.properties reads ${DB_PASSWORD}; hand it the
+        # same value the service container was created with.
+        env:
+          DB_PASSWORD: ci_test_pw
+        # --batch-mode silences interactive/ANSI download spam in CI logs.
+        run: ./mvnw --batch-mode verify
