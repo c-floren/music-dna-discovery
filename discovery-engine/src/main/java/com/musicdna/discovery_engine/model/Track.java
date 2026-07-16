@@ -20,10 +20,10 @@ public class Track {
     @Column(name = "id", length = 22, nullable = false)
     private String id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, columnDefinition = "text")
     private String name;
 
-    @Column(name = "artist", nullable = false)
+    @Column(name = "artist", nullable = false, columnDefinition = "text")
     private String artist;
 
     @Column(name = "tempo", nullable = false)
