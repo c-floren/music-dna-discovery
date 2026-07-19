@@ -17,5 +17,16 @@ public interface TrackRepository extends JpaRepository<Track, String> {
                           @Param("high") float high,
                           @Param("seedTempo") float seedTempo,
                           Limit limit);
+    List<Track> findByArtist(String artist, Limit limit);
 
+    @Query("SELECT t FROM Track t " + 
+        "WHERE t.valence BETWEEN :v - :delta AND :v + :delta " +
+        "AND t.energy BETWEEN :e - :delta AND :e + :delta " +
+        "AND t.acousticness BETWEEN :a - :delta AND :a + :delta " + 
+        "ORDER BY ABS(t.valence - :v) + ABS(t.energy - :e) + ABS(t.acousticness - :a)")
+    List<Track> followTheVibe(@Param("delta") float delta,
+                          @Param("v") float v,
+                          @Param("e") float e,
+                          @Param("a") float a,
+                          Limit limit);
 }
