@@ -26,11 +26,12 @@ public class FollowTheVibeStrategy implements RecommendationStrategy{
     @Override
     public List<Track> recommend(Track seed){
         float delta = 0.15f;
+        String id = seed.getId();
         float v = seed.getValence();
         float e = seed.getEnergy();
         float a = seed.getAcousticness();
         Limit limit = Limit.of(50);
-        return trackRepository.followTheVibe(delta, v, e, a, limit);
+        return trackRepository.followTheVibe(delta, id, v, e, a, limit);
     }
 }
 

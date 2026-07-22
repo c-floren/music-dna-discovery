@@ -26,10 +26,11 @@ public class LockTheRhythmStrategy implements RecommendationStrategy {
     @Override
     public List<Track> recommend(Track seed) {
         float tempo = seed.getTempo();
+        String id = seed.getId();
         float low = tempo - 5;
         float high = tempo + 5;
         Limit limit = Limit.of(50);
-        return trackRepository.lockTheRhythm(low, high, tempo, limit);
+        return trackRepository.lockTheRhythm(low, high, id, tempo, limit);
     }
     
 }

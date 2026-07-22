@@ -11,20 +11,22 @@ import com.musicdna.discovery_engine.model.Track;
 
 public interface TrackRepository extends JpaRepository<Track, String> {
     @Query("SELECT t FROM Track t " +
-       "WHERE t.tempo BETWEEN :low AND :high " +
+       "WHERE t.tempo BETWEEN :low AND :high AND t.id <> :seedId " +
        "ORDER BY ABS(t.tempo - :seedTempo)")
     List<Track> lockTheRhythm(@Param("low") float low,
                           @Param("high") float high,
+                          @Param("seedId") String seedId,
                           @Param("seedTempo") float seedTempo,
                           Limit limit);
-    List<Track> findByArtist(String artist, Limit limit);
+    List<Track> findByArtistAndIdNot(String artist, String id, Limit limit);
 
     @Query("SELECT t FROM Track t " + 
-        "WHERE t.valence BETWEEN :v - :delta AND :v + :delta " +
+        "WHERE t.valence BETWEEN :v - :delta AND :v + :delta AND t.id <> :seedId " +
         "AND t.energy BETWEEN :e - :delta AND :e + :delta " +
         "AND t.acousticness BETWEEN :a - :delta AND :a + :delta " + 
         "ORDER BY ABS(t.valence - :v) + ABS(t.energy - :e) + ABS(t.acousticness - :a)")
     List<Track> followTheVibe(@Param("delta") float delta,
+                          @Param("seedId") String seedId,
                           @Param("v") float v,
                           @Param("e") float e,
                           @Param("a") float a,

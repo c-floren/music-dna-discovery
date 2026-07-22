@@ -26,8 +26,9 @@ public class StayOnArtistStrategy implements RecommendationStrategy {
     @Override
     public List<Track> recommend(Track seed) {
         String artist = seed.getArtist();
+        String id = seed.getId();
         Limit limit = Limit.of(50);
-        return trackRepository.findByArtist(artist, limit);
+        return trackRepository.findByArtist(artist, id, limit);
     }
     
 }
